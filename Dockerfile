@@ -13,7 +13,8 @@ RUN apt-get update && apt-get -y --no-install-recommends install \
 RUN pip3 install pylint \
     black \
     mypy \
-    pytest
+    pytest \
+    yamllint
 
 COPY entrypoint.sh /entrypoint.sh
 
