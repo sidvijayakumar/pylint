@@ -7,7 +7,7 @@
 if [ "$3" = true ]; then
 
     echo Running: pylint --disable=duplicate-code --disable=too-many-instance-attributes $6 $2
-    pylint script.py | grep rated
+    echo pylint script.py | grep rated
     pylint --disable=duplicate-code --disable=too-many-instance-attributes $6 $2
     exit_code=$?
 
