@@ -8,16 +8,16 @@ jobs:
   py-lint:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v2
-      - uses: dmamontov/hass-py-lint@main
+      - uses: actions/checkout@v1
+      - uses: sidharthvijayakumar/pylint@main
         with:
           path: "tests"
 
   py-lint-branch:
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v2
-      - uses: dmamontov/hass-py-lint@main
+      - uses: actions/checkout@v1
+      - uses: sidharthvijayakumar/pylint@main
         with:
           path: "tests"
           hass-version: "dev"
