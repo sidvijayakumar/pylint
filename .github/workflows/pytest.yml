@@ -1,0 +1,35 @@
+---
+
+name: Pytest
+on:
+  repository_dispatch:
+    types: [pytest]
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    name: pytest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.client_payload.sha }}
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: run pytest
+        run: |
+          python -m pip install --upgrade pip \
+          pip install flake8 pytest pytest-cov
+      - name: Build coverage file
+        run: |
+          pytest --cache-clear --cov=app test/ > pytest-coverage.txt
+      - name: Comment coverage
+        uses: coroo/pytest-coverage-commentator@v1.0.2
+
+      - name: Send Notification to Teams Channel
+        uses: toko-bifrost/ms-teams-deploy-card@master
+        if: always()
+        with:
+          github-token: ${{ secrets.REPO_GHA_PAT }}
+          webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
