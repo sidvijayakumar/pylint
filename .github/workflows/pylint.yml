@@ -1,0 +1,37 @@
+---
+
+name: Python Notebooks Linting
+on:
+  pull_request:
+    branches:
+      - '**'
+      - 'master'
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+         python -m pip install --upgrade pip
+            pip install pylint
+            pip install umsgpack
+            pip install cryptography
+            pip install pylint-fail-under
+      - name: pylint version
+        run: pylint --version
+      - name: Lists pylint score of every file
+        run: find . -name '*.py' -print -exec pylint --disable=E0401,W0611 {} \;
+      - name: Checks if pylint score is above 7.0
+        run: |
+              for file in $(find -name '*.py')
+              do
+                pylint --disable=E0401,W0611 "$file" --fail-under=7.0;
+              done
+      - name: Send Notification to Teams Channel
+        uses: toko-bifrost/ms-teams-deploy-card@master
+        if: always()
+        with:
+          github-token: ${{ secrets.REPO_GHA_PAT }}
+          webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
